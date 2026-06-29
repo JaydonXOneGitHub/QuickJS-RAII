@@ -7,6 +7,10 @@ A custom QuickJS wrapper designed for idiomatic C++
     <li>You must have a C++ compiler that is compatible with C++17 or later.<li>
 </ui>
 
+# Additional Notes
+I have not gotten around to adding properties for custom JS classes yet, although this can be replicated by having `getX` and `setX` methods rather than a single property `x`, for example.<br>
+If any of the following bother you enough, please submit a request or feel free to fork yourself, provided you're comfortable dealing with a C API underneath. :relaxed:
+
 # How to Build
 1. Install Python.
 2. Install `pip` if not already installed.
