@@ -1,6 +1,6 @@
 #define QUICKJS_FUNCTION_DECLARATION(name) \
     static JSValue name (JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv); \
-    static QuickJS::Value name##Wrapped(const QuickJS::Context& context, \
+    static QuickJS::Value name##Wrapped(QuickJS::Context& context, \
         QuickJS::Value& thisValue, \
         const std::vector<QuickJS::Value>& args \
     );

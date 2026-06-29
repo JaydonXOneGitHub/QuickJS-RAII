@@ -1,6 +1,12 @@
 # QuickJS-RAII
 A custom QuickJS wrapper designed for idiomatic C++
 
+# Prerequisites
+<ui>
+    <li>You must have compiled a static or dynamic library of QuickJS (preferably version "2020-07-05" - if you use a different version that is incompatible with this API, do so at your own risk).</li>
+    <li>You must have a C++ compiler that is compatible with C++17 or later.<li>
+</ui>
+
 # How to Build
 1. Install Python.
 2. Install `pip` if not already installed.

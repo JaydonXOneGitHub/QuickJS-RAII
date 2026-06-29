@@ -75,7 +75,19 @@ namespace QuickJS {
 
         template<typename T, typename... Args>
         Value createNativeObject(Args... args) {
+            JSClassID classID = ClassBinding<T>::classID;
+
+            if (classID == 0) {
+                throw Exception("Class of provided type was never registered!");
+            }
+
             T* ptr = new T(args...);
+
+            JSValue obj = JS_NewObjectClass(this->ctx, classID);
+
+            JS_SetOpaque(obj, (void*)ptr);
+
+            return Value(this->ctx, obj);
         }
 
         template<typename T>
