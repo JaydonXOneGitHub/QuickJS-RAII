@@ -59,4 +59,74 @@ int main() {
 ```
 
 # How to Use - Class Binding
-Coming soon!
+In order to bind and use a class in JS, we'll follow a simple example with a `Point` class:
+```cpp
+#include "quickjs-raii/runtime.hpp"
+#include "quickjs-raii/context.hpp"
+#include "quickjs-raii/helpers.hpp"
+#include "quickjs-raii/classbinding.hpp"
+
+#include <iostream>
+
+struct Point {
+public:
+    int x;
+    int y;
+
+public:
+    Point() : x(0), y(0) {}
+    Point(int x, int y) : x(x), y(y) {}
+
+    QUICKJS_FUNCTION_DECLARATION(constructor)
+};
+
+QUICKJS_METHOD_IMPLEMENTATION(Point, constructor)
+
+QuickJS::Value Point::constructorWrapped(
+    QuickJS::Context& ctx, 
+    QuickJS::Value& thisValue, 
+    const std::vector<QuickJS::Value>& args
+) {
+    std::cout << "Constructor called!" << std::endl;
+
+    if (args.size() < 2) {
+        return QuickJS::Value(ctx.getContext(), JS_EXCEPTION);
+    }
+
+    // Cloning these because the value representation types do not allow copying
+    QuickJS::Value arg1 = args[0].clone();
+    QuickJS::Value arg2 = args[1].clone();
+
+    if (arg1.isNumber() && arg2.isNumber()) {
+        int x = (int)arg1.asNumber();
+        int y = (int)arg2.asNumber();
+
+        return ctx.createNativeObject<Point>(x, y);
+    }
+
+    return QuickJS::Value(ctx.getContext(), JS_EXCEPTION);
+}
+
+int main() {
+    QuickJS::Runtime jsRuntime = QuickJS::Runtime();
+    QuickJS::Context jsContext = QuickJS::Context(jsRuntime);
+    
+    {
+        QuickJS::ClassBinding<Point> pointBind = jsContext.createClassBinding<Point>("Point");
+
+        pointBind.registerConstructor(Point::constructor, 2);
+    }
+    {
+        QuickJS::Value v = jsContext.evalCode("let p = new Point(20, 40); p;");
+
+        if (v.isObject()) {
+            QuickJS::Object o = v.asObject();
+
+            if (Point* p = o.getOpaque<Point>(); p) {
+                std::cout << "Point { x: " << p->x << ", " << p->y << " }";
+            }
+        }
+    }
+    return 0;
+}
+```
