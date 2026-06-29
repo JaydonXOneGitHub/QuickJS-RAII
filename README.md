@@ -8,6 +8,7 @@ A custom QuickJS wrapper designed for idiomatic C++
 
 # Additional Notes
 Properties for custom JS classes have not been implemented yet. Currently, to get a similar approach for them, as an example, use `getX` and `setX` methods as opposed to using a single property `x`.
+It also does not currently support loading JS modules from the C++ API.
 If any of the preceding bother you enough, please submit a request, or feel free to fork yourself, provided you're comfortable dealing with a C API underneath. :relaxed:
 
 # How to Build
