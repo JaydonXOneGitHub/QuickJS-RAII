@@ -7,10 +7,14 @@ Runtime::Runtime() {
 }
 
 Runtime::~Runtime() {
-    JS_RunGC(rt);
+    this->runGarbageCollector();
     JS_FreeRuntime(this->rt);
 }
 
 JSRuntime* Runtime::getRuntime() const {
     return this->rt;
+}
+
+void Runtime::runGarbageCollector() const {
+    JS_RunGC(this->rt);
 }

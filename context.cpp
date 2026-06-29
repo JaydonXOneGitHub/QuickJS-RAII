@@ -61,6 +61,7 @@ void Context::registerClass(void(*jsClassInstiantiator)(JSRuntime* rt, JSContext
 }
 
 Value Context::evalCode(const std::string& source) {
+    JS_RunGC(JS_GetRuntime(this->ctx));
     JSValue v = JS_Eval(this->ctx, source.c_str(), source.length(), "<source>", 0);
     Value val = Value(this->ctx, v);
     return val;

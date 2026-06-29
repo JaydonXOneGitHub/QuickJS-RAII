@@ -14,5 +14,7 @@ namespace QuickJS {
         ~Runtime();
 
         JSRuntime* getRuntime() const;
+
+        void runGarbageCollector() const;
     };
 }
