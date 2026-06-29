@@ -28,3 +28,31 @@
         }\
         return type :: name##Wrapped(context, thisValue, args).getRawDuplicate(); \
     }
+
+#define QUICKJS_MODULE_LOADER_DECLARATION(name) \
+    static JSModuleDef* name(JSContext *ctx, const char *module_name, void *opaque); \
+    static QuickJS::ModuleDef name##Wrapped(QuickJS::Context& context, \
+        const std::string& moduleName \
+    );
+
+#define QUICKJS_MODULE_LOADER_IMPLEMENTATION(name) \
+    static JSModuleDef* name(JSContext *ctx, const char *module_name, void *opaque) { \
+        QuickJS::Context context = QuickJS::Context(ctx); \
+        std::string moduleName(module_name ? module_name : ""); \
+        try { \
+            return name##Wrapped(context, moduleName).getRaw(); \
+        } catch (const std::exception& e) { \
+            return nullptr; \
+        } \
+    }
+
+#define QUICKJS_MODULE_LOADER_CLASS_IMPLEMENTATION(type, name) \
+    JSModuleDef* type :: name(JSContext *ctx, const char *module_name, void *opaque) { \
+        QuickJS::Context context = QuickJS::Context(ctx); \
+        std::string moduleName(module_name ? module_name : ""); \
+        try { \
+            return type :: name##Wrapped(context, moduleName).getRaw(); \
+        } catch (const std::exception& e) { \
+            return nullptr; \
+        } \
+    }

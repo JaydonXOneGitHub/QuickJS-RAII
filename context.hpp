@@ -48,6 +48,7 @@ namespace QuickJS {
         void setGlobalProperty(const char* propName, const Value& value);
 
         Value evalCode(const std::string& source);
+        Value evalModuleCode(const std::string& source);
 
         Value getGlobalObject() const;
         JSValue getGlobalObjectRaw() const;

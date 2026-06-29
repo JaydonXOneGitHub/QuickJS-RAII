@@ -62,8 +62,24 @@ void Context::registerClass(void(*jsClassInstiantiator)(JSRuntime* rt, JSContext
 
 Value Context::evalCode(const std::string& source) {
     JS_RunGC(JS_GetRuntime(this->ctx));
-    JSValue v = JS_Eval(this->ctx, source.c_str(), source.length(), "<source>", 0);
+    JSValue v = JS_Eval(this->ctx, source.c_str(), source.length(), "<input>", 0);
     Value val = Value(this->ctx, v);
+    return val;
+}
+
+Value Context::evalModuleCode(const std::string& source) {
+    JS_RunGC(JS_GetRuntime(this->ctx));
+    JSValue v = JS_Eval(this->ctx, source.c_str(), source.length(), "<input>", JS_EVAL_TYPE_MODULE | JS_EVAL_FLAG_COMPILE_ONLY);
+
+    if (JS_IsException(v)) {
+        return Value(this->ctx, v);
+    }
+
+    JSValue ret = JS_EvalFunction(this->ctx, v);
+
+    JS_FreeValue(this->ctx, v);
+
+    Value val = Value(this->ctx, ret);
     return val;
 }
 
