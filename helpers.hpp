@@ -36,7 +36,7 @@
         return name##Wrapped(context, thisValue, args).getRawDuplicate(); \
     }
 
-#define QUICKJS_STATIC_METHOD_DECLARATION(name) QUICKJS_FUNCTION_DECLARATION(name)
+#define QUICKJS_STATIC_METHOD_DECLARATION(name) QUICKJS_STATIC_FUNCTION_DECLARATION(name)
 
 #define QUICKJS_STATIC_METHOD_IMPLEMENTATION(type, name) \
     JSValue type :: name (JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) { \
