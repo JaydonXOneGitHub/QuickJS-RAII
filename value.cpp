@@ -244,6 +244,54 @@ bool Value::isNaN() const {
     return (bool)JS_VALUE_IS_NAN(this->value);
 }
 
+Tag Value::getTag() const {
+    int tag = JS_VALUE_GET_TAG(this->value);
+    switch (tag) {
+        case JS_TAG_BOOL: {
+            return Tag::Bool;
+        }
+        case JS_TAG_OBJECT: {
+            return Tag::Object;
+        }
+        case JS_TAG_EXCEPTION: {
+            return Tag::Exception;
+        }
+        case JS_TAG_INT: {
+            return Tag::Int;
+        }
+        case JS_TAG_FLOAT64: {
+            return Tag::Float;
+        }
+        case JS_TAG_STRING: {
+            return Tag::String;
+        }
+        case JS_TAG_UNDEFINED: {
+            return Tag::Undefined;
+        }
+        case JS_TAG_NULL: {
+            return Tag::Null;
+        }
+        case JS_TAG_SYMBOL: {
+            return Tag::Symbol;
+        }
+        case JS_TAG_MODULE: {
+            return Tag::Module;
+        }
+        case JS_TAG_BIG_INT: {
+            return Tag::BigInt;
+        }
+        case JS_TAG_BIG_FLOAT: {
+            return Tag::BigFloat;
+        }
+        case JS_TAG_BIG_DECIMAL: {
+            return Tag::BigDecimal;
+        }
+        default: {
+            return Tag::Unknown;
+        }
+    }
+}
+
 Value Value::clone() const {
     return Value(this->ctx, this->value);
 }

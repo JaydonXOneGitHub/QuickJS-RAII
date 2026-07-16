@@ -6,6 +6,7 @@
 #include "function.hpp"
 #include "exception.hpp"
 #include "clonable.hpp"
+#include "tag.hpp"
 #include <string>
 
 namespace QuickJS {
@@ -44,6 +45,8 @@ namespace QuickJS {
         Object asObject() const;
         Function asFunction() const;
         Exception asException() const;
+
+        Tag getTag() const;
 
         Value clone() const override;
 
