@@ -4,6 +4,7 @@
 #include "clonable.hpp"
 #include <string>
 #include "classbinding.hpp"
+#include "pointer.hpp"
 
 namespace QuickJS {
     class Value;
@@ -23,9 +24,10 @@ namespace QuickJS {
         ~Object();
 
         template<typename T>
-        T* getOpaque() const {
+        Pointer<T> getOpaque() const {
             std::cout << ClassBinding<T>::classID << '\n';
-            return static_cast<T*>(JS_GetOpaque(this->object, ClassBinding<T>::classID));
+            T* ptr = static_cast<T*>(JS_GetOpaque(this->object, ClassBinding<T>::classID));
+            return Pointer(ptr);
         }
 
         Value backToJSValue() const;

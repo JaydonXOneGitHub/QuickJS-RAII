@@ -4,6 +4,7 @@
 #include "runtime.hpp"
 #include "value.hpp"
 #include "classbinding.hpp"
+#include "pointer.hpp"
 
 namespace QuickJS {
     class Context {
@@ -22,17 +23,17 @@ namespace QuickJS {
         void freeContextOpaque();
 
         template<typename T, typename... Args>
-        T* registerContextOpaque(Args... args) {
+        Pointer<T> registerContextOpaque(Args... args) {
             this->freeContextOpaque();
             T* value = new T(args...);
             this->ctxOpaque = value;
             JS_SetContextOpaque(this->ctx, this->ctxOpaque);
-            return value;
+            return Pointer(value);
         }
 
         template<typename T>
-        T* getContextOpaque() const {
-            return static_cast<T*>(JS_GetContextOpaque(this->ctx));
+        Pointer<T> getContextOpaque() const {
+            return Pointer(static_cast<T*>(JS_GetContextOpaque(this->ctx)));
         }
 
         void registerClass(void(*jsClassInstiantiator)(JSRuntime* rt, JSContext* ctx));
