@@ -140,3 +140,129 @@ int main() {
     return 0;
 }
 ```
+
+# How to Use - Function Binding
+
+In order to bind a function, do something like the following:
+
+```cpp
+#include "quickjs-raii/runtime.hpp"
+#include "quickjs-raii/context.hpp"
+#include "quickjs-raii/helpers.hpp"
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+
+static std::string getObjectAsString(const QuickJS::Object& obj);
+static std::string getValueAsString(const QuickJS::Value& value);
+
+QUICKJS_FUNCTION_DECLARATION(log);
+
+int main() {
+    QuickJS::Runtime rt = QuickJS::Runtime();
+    QuickJS::Context ctx = QuickJS::Context(rt);
+
+    {
+        QuickJS::Value console = ctx.createObject();
+
+        {
+            QuickJS::Value g = ctx.getGlobalObject();
+
+            QuickJS::Object globals = g.asObject();
+
+            globals.set("console", console);
+        }
+
+        QuickJS::Value funcLog = ctx.createFunction(log, "log");
+
+        QuickJS::Object consoleObj = console.asObject();
+
+        consoleObj.set("log", funcLog);
+
+        QuickJS::Value res = ctx.evalCode("console.log(\"Hello, World!\")");
+    }
+    
+    
+    return 0;
+}
+
+QUICKJS_FUNCTION_IMPLEMENTATION(log)
+
+QuickJS::Value logWrapped(
+    QuickJS::Context& ctx, 
+    QuickJS::Value& thisValue, 
+    const std::vector<QuickJS::Value>& args
+) {
+    for (const QuickJS::Value& arg : args) {
+        std::cout << getValueAsString(arg) << ",";
+    }
+
+    std::cout << std::endl;
+
+    return ctx.createUndefined();
+}
+
+static std::string getValueAsString(const QuickJS::Value& value) {
+    std::string output = "";
+    
+    switch (value.getTag()) {
+        case QuickJS::Tag::Bool: {
+            output = (value.asBoolean()) ? "true" : "false";
+            break;
+        }
+        case QuickJS::Tag::Int: {
+            output = std::to_string((int64_t)value.asNumber());
+            break;
+        }
+        case QuickJS::Tag::Float: {
+            output = std::to_string(value.asNumber());
+            break;
+        }
+        case QuickJS::Tag::Null: {
+            output = "null";
+            break;
+        }
+        case QuickJS::Tag::Undefined: {
+            output = "undefined";
+            break;
+        }
+        case QuickJS::Tag::String: {
+            output = value.asString();
+            break;
+        }
+        case QuickJS::Tag::Object: {
+            QuickJS::Object o = value.asObject();
+            output = getObjectAsString(o);
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+
+    return output;
+}
+
+static std::string getObjectAsString(const QuickJS::Object& obj) {
+    std::string output = "";
+
+    QuickJS::Value f = obj.get("toString");
+
+    if (f.isFunction()) {
+        QuickJS::Function func = f.asFunction();
+
+        QuickJS::Value objValue = obj.backToJSValue();
+
+        QuickJS::Value res = func.call(objValue);
+
+        if (res.isString()) {
+            output = res.asString();
+        }
+    }
+
+    return output;
+}
+
+```
