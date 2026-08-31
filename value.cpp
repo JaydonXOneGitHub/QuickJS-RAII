@@ -304,95 +304,13 @@ JSValue Value::getRawDuplicate() const {
     return JS_DupValue(this->ctx, this->value);
 }
 
-template<>
-Array Value::is<Array>() const {
-    return this->isArray();
-}
-
-template<>
-Array Value::as<Array>() const {
-    return this->asArray();
-}
-
-template<>
-Object Value::is<Object>() const {
-    return this->isObject();
-}
-
-template<>
-Object Value::as<Object>() const {
-    return this->asObject();
-}
-
-template<>
-Function Value::is<Function>() const {
-    return this->isFunction();
-}
-
-template<>
-Function Value::as<Function>() const {
-    return this->asFunction();
-}
-
-template<>
-Exception Value::is<Exception>() const {
-    return this->isException();
-}
-
-template<>
-Exception Value::as<Function>() const {
-    return this->asException();
-}
-
-template<>
-double Value::is<double>() const {
-    return this->isNumber();
-}
-
-template<>
-double Value::as<double>() const {
-    return this->asNumber();
-}
-
-template<>
-bool Value::is<bool>() const {
-    return this->isBoolean();
-}
-
-template<>
-bool Value::as<bool>() const {
-    return this->asBoolean();
-}
-
-template<>
-std::string Value::is<std::string>() const {
-    return this->isString();
-}
-
-template<>
-std::string Value::as<std::string>() const {
-    return this->asString();
-}
-
-template<>
-int64_t Value::is<int64_t>() const {
-    return this->isBigInt();
-}
-
-template<>
-int64_t Value::as<int64_t>() const {
-    return this->asBigInt();
-}
-
 std::string Value::toString() const {
-    JSValue v = JS_GetPropertyStr(this->ctx, this->value, propName);
+    JSValue v = JS_GetPropertyStr(this->ctx, this->value, "toString");
     Value value = Value(this->ctx, v);
 
     QuickJS::Function toStr = value.asFunction();
 
-    QuickJS::Value thisVal = this->backToJSValue();
-
-    QuickJS::Value ret = toStr.call(thisVal);
+    QuickJS::Value ret = toStr.call(*this);
 
     return ret.asString();
 }

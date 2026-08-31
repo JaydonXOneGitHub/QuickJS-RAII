@@ -94,7 +94,7 @@ Array Array::clone() const {
 }
 
 std::string Array::toString() const {
-    JSValue v = JS_GetPropertyStr(this->ctx, this->array, propName);
+    JSValue v = JS_GetPropertyStr(this->ctx, this->array, "toString");
     Value value = Value(this->ctx, v);
 
     QuickJS::Function toStr = value.asFunction();

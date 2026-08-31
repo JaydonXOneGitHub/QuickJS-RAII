@@ -100,7 +100,7 @@ Value Function::call(const Value& thisObject) {
 }
 
 std::string Function::toString() const {
-    JSValue v = JS_GetPropertyStr(this->ctx, this->func, propName);
+    JSValue v = JS_GetPropertyStr(this->ctx, this->func, "toString");
     Value value = Value(this->ctx, v);
 
     QuickJS::Function toStr = value.asFunction();
