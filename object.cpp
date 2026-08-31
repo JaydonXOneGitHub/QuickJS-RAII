@@ -76,3 +76,15 @@ void Object::set(const char* propName, const Value& value) {
 Object Object::clone() const {
     return Object(this->ctx, JS_DupValue(this->ctx, this->object));
 }
+
+std::string Object::toString() const {
+    QuickJS::Value f = this->get("toString");
+
+    QuickJS::Function toStr = f.asFunction();
+
+    QuickJS::Value thisVal = this->backToJSValue();
+
+    QuickJS::Value ret = toStr.call(thisVal);
+
+    return ret.asString();
+}

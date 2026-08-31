@@ -54,7 +54,7 @@ namespace QuickJS {
 
     private:
         static void finalizer(JSRuntime* rt, JSValue val) {
-            PRINTLN("Destructor is now running!");
+            //PRINTLN("Destructor is now running!");
 
             T* ptr = static_cast<T*>(JS_GetOpaque(val, ClassBinding<T>::classID));
 

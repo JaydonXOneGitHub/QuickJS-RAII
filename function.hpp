@@ -23,6 +23,8 @@ namespace QuickJS {
 
         Function clone() const override;
 
+        std::string toString() const override;
+
         Value backToJSValue() const;
 
         bool isValid() const;

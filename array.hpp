@@ -29,6 +29,8 @@ namespace QuickJS {
 
         bool isValid() const;
 
+        std::string toString() const override;
+
         Array clone() const override;
     };
 }

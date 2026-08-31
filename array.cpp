@@ -92,3 +92,16 @@ bool Array::isValid() const {
 Array Array::clone() const {
     return Array(this->ctx, this->array, this->length);
 }
+
+std::string Array::toString() const {
+    JSValue v = JS_GetPropertyStr(this->ctx, this->array, propName);
+    Value value = Value(this->ctx, v);
+
+    QuickJS::Function toStr = value.asFunction();
+
+    QuickJS::Value thisVal = this->backToJSValue();
+
+    QuickJS::Value ret = toStr.call(thisVal);
+
+    return ret.asString();
+}

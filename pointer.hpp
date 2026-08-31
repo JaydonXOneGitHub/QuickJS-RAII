@@ -4,7 +4,7 @@ namespace QuickJS {
     template<typename T>
     class Pointer {
     private:
-        T* const ptr;
+        T* ptr;
 
     public:
         explicit Pointer(T* ptr) {

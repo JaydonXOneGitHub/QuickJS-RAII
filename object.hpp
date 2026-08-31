@@ -35,8 +35,11 @@ namespace QuickJS {
         Value get(const char* propName) const;
         void set(const char* propName, const Value& value);
 
+        
         bool isValid() const;
-
+        
+        std::string toString() const override;
+        
         Object clone() const override;
     };
 }
