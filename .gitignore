@@ -3,3 +3,6 @@
 .sconsign.dblite
 .sconsign.dblite
 .sconsign.dblite
+thing.cpp
+.vs/**
+.vscode/**

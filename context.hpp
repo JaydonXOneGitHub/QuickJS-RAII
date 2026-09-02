@@ -5,6 +5,8 @@
 #include "value.hpp"
 #include "classbinding.hpp"
 #include "pointer.hpp"
+#include "moduledef.hpp"
+#include "moduleloader.hpp"
 
 namespace QuickJS {
     class Context {
@@ -64,6 +66,9 @@ namespace QuickJS {
         Value createObject() const;
         Value createNull() const;
         Value createUndefined() const;
+        
+        ModuleDef createModule(std::string name, JSModuleInitFunc moduleInit);
+        ModuleLoader createModuleLoader();
 
         JSValue createNumberRaw(double value);
         JSValue createBigInt64Raw(int64_t value);

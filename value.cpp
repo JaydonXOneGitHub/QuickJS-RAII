@@ -1,4 +1,5 @@
 #include "value.hpp"
+#include "moduledef.hpp"
 #include <iostream>
 
 using namespace QuickJS;
@@ -242,6 +243,10 @@ bool Value::isUndefined() const {
 
 bool Value::isNaN() const {
     return (bool)JS_VALUE_IS_NAN(this->value);
+}
+
+ModuleDef Value::getModule() const {
+    return ModuleDef(this->ctx, (JSModuleDef*)(JS_VALUE_GET_PTR(this->value)));
 }
 
 Tag Value::getTag() const {

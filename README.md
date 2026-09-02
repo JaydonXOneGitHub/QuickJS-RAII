@@ -8,7 +8,6 @@ A custom QuickJS wrapper designed for idiomatic C++
 
 # Additional Notes
 Properties for custom JS classes have not been implemented yet. Currently, to get a similar approach for them, as an example, use `getX` and `setX` methods as opposed to using a single property `x`.<br>
-It also does not currently support loading JS modules from the C++ API.<br>
 If any of the preceding bother you enough, please submit a request, or feel free to fork yourself, provided you're comfortable dealing with a C API underneath. :relaxed:
 
 # How to Build
@@ -132,7 +131,7 @@ int main() {
         if (v.isObject()) {
             QuickJS::Object o = v.asObject();
 
-            if (Point* p = o.getOpaque<Point>(); p) {
+            if (QuickJS::Pointer<Point>* p = o.getOpaque<Point>(); p) {
                 std::cout << "Point { x: " << p->x << ", " << p->y << " }";
             }
         }
@@ -265,4 +264,98 @@ static std::string getObjectAsString(const QuickJS::Object& obj) {
     return output;
 }
 
+```
+
+# How to Use - Modules
+
+For setting up modules, use code such as the following for C++-defined modules:
+```cpp
+#include "init_modules.hpp"
+#include "quickjs-raii/helpers.hpp"
+#include <unordered_map>
+
+static std::unordered_map<std::string, QuickJS::ModuleDef> modules;
+
+QUICKJS_MODULE_LOADER_DECLARATION(moduleLoader)
+
+QUICKJS_MODULE_LOADER_IMPLEMENTATION(moduleLoader)
+
+QuickJS::ModuleDef moduleLoaderWrapped(
+    QuickJS::Context& ctx, const std::string& moduleName, void* opaque
+) {
+    return modules[moduleName];
+}
+
+QUICKJS_MODULE_NORMALIZER_DECLARATION(moduleNormalizer)
+
+QUICKJS_MODULE_NORMALIZER_IMPLEMENTATION(moduleNormalizer)
+
+std::string moduleNormalizerWrapped( 
+    QuickJS::Context& ctx, 
+    const std::string& moduleBaseName, 
+    const std::string& moduleName, 
+    void* opaque 
+) {
+    std::cout << "normalize: base="
+              << moduleBaseName
+              << ", name="
+              << moduleName
+              << '\n';
+
+    return moduleName;
+}
+
+QUICKJS_MODULE_INIT_DECLARATION(moduleInit)
+
+void init_modules(QuickJS::Context& ctx) {
+    QuickJS::ModuleDef test = ctx.createModule("test", moduleInit);
+
+    modules["test"] = test;
+
+    int ret = 0;
+
+    std::string foo = "foo";
+    std::string bar = "bar";
+
+    ret = test.addModuleExport(foo);
+
+    if (ret != 0) {
+        throw QuickJS::Exception("Export add failed!");
+    }
+    
+    ret = test.addModuleExport(bar);
+
+    if (ret != 0) {
+        throw QuickJS::Exception("Export add failed!");
+    }
+
+    QuickJS::ModuleLoader loader = ctx.createModuleLoader();
+
+    loader.setLoader(moduleLoader)
+        .setNormalizer(moduleNormalizer)
+        .submit();
+}
+
+QUICKJS_MODULE_INIT_IMPLEMENTATION(moduleInit)
+
+int moduleInitWrapped(QuickJS::Context& ctx, QuickJS::ModuleDef& md) {
+    int ret = 0;
+
+    std::string foo = "foo";
+    std::string bar = "bar";
+
+    ret = md.exportValue(foo, ctx.createArray());
+    
+    if (ret != 0) {
+        return ret;
+    }
+    
+    ret = md.exportValue(bar, ctx.createObject());
+
+    if (ret != 0) {
+        return ret;
+    }
+
+    return 0;
+}
 ```

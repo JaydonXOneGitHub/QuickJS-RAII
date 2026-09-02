@@ -8,12 +8,10 @@
 #include "clonable.hpp"
 #include "tag.hpp"
 #include <string>
+#include "moduledef.hpp"
 
 namespace QuickJS {
-    using Number = double;
-    using String = std::string;
-    using Boolean = bool;
-    using BigInt = int64_t;
+    class ModuleDef;
 
     class Value final : public Clonable<Value> {
     private:
@@ -52,6 +50,8 @@ namespace QuickJS {
         Object asObject() const;
         Function asFunction() const;
         Exception asException() const;
+
+        ModuleDef getModule() const;
 
         Tag getTag() const;
 
