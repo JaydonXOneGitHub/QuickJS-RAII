@@ -16,6 +16,9 @@ def add_flags(env: Environment) -> None:
     c_flags: list[str] = []
     link_flags: list[str] = []
     cpp_defines: list[str] = []
+    include_paths: list[str] = [
+        'include/'
+    ]
 
     if platform.system() == "Windows":
         cpp_flags.append("/std:c++17")
@@ -40,10 +43,11 @@ def add_flags(env: Environment) -> None:
     env.Append(CCFLAGS=c_flags)
     env.Append(LINKFLAGS=link_flags)
     env.Append(CPPDEFINES=cpp_defines)
+    env.Append(CPPPATH=include_paths)
 
 add_flags(env)
 
-sources: list = env.Glob("*.cpp")
+sources: list = env.Glob("src/*.cpp")
 
 target: str = f'{out_dir}/{project_name}'
 
