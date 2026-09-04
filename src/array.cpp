@@ -77,6 +77,97 @@ void Array::set(uint32_t index, const Value& value) {
     }
 }
 
+Value Array::pop() {
+    JSValue v = JS_GetPropertyStr(this->ctx, this->array, "pop");
+    Value value = Value(this->ctx, v);
+
+    QuickJS::Function function = value.asFunction();
+
+    QuickJS::Value thisVal = this->backToJSValue();
+
+    QuickJS::Value ret = function.call(thisVal);
+
+    return ret;
+}
+
+Value Array::shift() {
+    JSValue v = JS_GetPropertyStr(this->ctx, this->array, "shift");
+    Value value = Value(this->ctx, v);
+
+    QuickJS::Function function = value.asFunction();
+
+    QuickJS::Value thisVal = this->backToJSValue();
+
+    QuickJS::Value ret = function.call(thisVal);
+
+    return ret;
+}
+
+Value Array::reverse() {
+    JSValue v = JS_GetPropertyStr(this->ctx, this->array, "reverse");
+    Value value = Value(this->ctx, v);
+
+    QuickJS::Function function = value.asFunction();
+
+    QuickJS::Value thisVal = this->backToJSValue();
+
+    QuickJS::Value ret = function.call(thisVal);
+
+    return ret;
+}
+
+Value Array::clear() {
+    JSValue v = JS_GetPropertyStr(this->ctx, this->array, "clear");
+    Value value = Value(this->ctx, v);
+
+    QuickJS::Function function = value.asFunction();
+
+    QuickJS::Value thisVal = this->backToJSValue();
+
+    QuickJS::Value ret = function.call(thisVal);
+
+    return ret;
+}
+
+bool Array::isEmpty() const {
+    JSValue v = JS_GetPropertyStr(this->ctx, this->array, "pop");
+    Value value = Value(this->ctx, v);
+
+    QuickJS::Function function = value.asFunction();
+
+    QuickJS::Value thisVal = this->backToJSValue();
+
+    QuickJS::Value ret = function.call(thisVal);
+
+    return ret.asBoolean();
+}
+
+Value Array::push(const std::initializer_list<Value>& values) {
+    JSValue v = JS_GetPropertyStr(this->ctx, this->array, "push");
+    Value value = Value(this->ctx, v);
+
+    QuickJS::Function function = value.asFunction();
+
+    QuickJS::Value thisVal = this->backToJSValue();
+
+    QuickJS::Value ret = function.call(thisVal, values);
+
+    return ret;
+}
+
+Value Array::unshift(const std::initializer_list<Value>& values) {
+    JSValue v = JS_GetPropertyStr(this->ctx, this->array, "unshift");
+    Value value = Value(this->ctx, v);
+
+    QuickJS::Function function = value.asFunction();
+
+    QuickJS::Value thisVal = this->backToJSValue();
+
+    QuickJS::Value ret = function.call(thisVal, values);
+
+    return ret;
+}
+
 uint32_t Array::getLength() const {
     Value len = Value(this->ctx, this->length);
     return (uint32_t)len.asNumber();

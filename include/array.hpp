@@ -2,6 +2,7 @@
 
 #include "quickjs.h"
 #include "clonable.hpp"
+#include <initializer_list>
 
 namespace QuickJS {
     class Value;
@@ -24,8 +25,24 @@ namespace QuickJS {
 
         Value get(uint32_t index) const;
         void set(uint32_t index, const Value& value);
-
+        Value pop();
+        Value shift();
+        Value reverse();
+        Value clear();
+        bool isEmpty() const;
         uint32_t getLength() const;
+        Value push(const std::initializer_list<Value>& values);
+        Value unshift(const std::initializer_list<Value>& values);
+
+        template<typename... Args>
+        Value push(Args... args) {
+            return this->push({ args... });
+        }
+
+        template<typename... Args>
+        Value unshift(Args... args) {
+            return this->unshift({ args... });
+        }
 
         bool isValid() const;
 
