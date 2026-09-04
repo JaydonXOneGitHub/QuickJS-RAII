@@ -359,3 +359,58 @@ int moduleInitWrapped(QuickJS::Context& ctx, QuickJS::ModuleDef& md) {
     return 0;
 }
 ```
+
+# How to Use - Promises
+JS Promises can be constructed in the following way from a function:
+```cpp
+
+#include "quickjs-raii/runtime.hpp"
+#include "quickjs-raii/context.hpp"
+#include "quickjs-raii/helpers.hpp"
+#include "quickjs-raii/promise.hpp"
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+
+static std::string getObjectAsString(const QuickJS::Object& obj);
+static std::string getValueAsString(const QuickJS::Value& value);
+
+QUICKJS_FUNCTION_DECLARATION(testPromise);
+
+int main() {
+    QuickJS::Runtime rt = QuickJS::Runtime();
+    QuickJS::Context ctx = QuickJS::Context(rt);
+
+    {
+        QuickJS::Value global = ctx.getGlobalObject();
+
+        QuickJS::Value funcTestPromise = ctx.createFunction(testPromise, "testPromise");
+
+        QuickJS::Object globalObj = global.asObject();
+
+        globalObj.set("testPromise", testPromise);
+
+        // Do something with the promise in your script
+    }
+    
+    
+    return 0;
+}
+
+QUICKJS_FUNCTION_IMPLEMENTATION(testPromise)
+
+QuickJS::Value testPromiseWrapped(
+    QuickJS::Context& ctx, 
+    QuickJS::Value& thisValue, 
+    const std::vector<QuickJS::Value>& args
+) {
+    QuickJS::Promise p = ctx.createPromise();
+
+    // handle promise resolve or reject with some work
+
+    return p.toValue();
+}
+
+```
