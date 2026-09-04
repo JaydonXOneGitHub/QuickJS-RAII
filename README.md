@@ -373,10 +373,6 @@ JS Promises can be constructed in the following way from a function:
 #include <string>
 #include <vector>
 
-
-static std::string getObjectAsString(const QuickJS::Object& obj);
-static std::string getValueAsString(const QuickJS::Value& value);
-
 QUICKJS_FUNCTION_DECLARATION(testPromise);
 
 int main() {
