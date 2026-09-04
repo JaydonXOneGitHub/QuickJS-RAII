@@ -4,7 +4,7 @@
 #include <string>
 
 namespace QuickJS {
-    class Exception : public std::exception {
+    class Exception final : public std::exception {
     private:
         std::string message;
 

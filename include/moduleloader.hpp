@@ -3,7 +3,7 @@
 #include "quickjs.h"
 
 namespace QuickJS {
-    class ModuleLoader {
+    class ModuleLoader final {
     private:
         JSContext* ctx;
         void* opaque;

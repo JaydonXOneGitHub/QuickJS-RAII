@@ -126,6 +126,10 @@ ModuleLoader Context::createModuleLoader() {
     return ModuleLoader(this->ctx);
 }
 
+Promise Context::createPromise() const {
+    return Promise(this->ctx);
+}
+
 JSValue Context::createNumberRaw(double value) {
     return JS_NewFloat64(this->ctx, value);
 }

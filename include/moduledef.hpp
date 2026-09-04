@@ -5,7 +5,7 @@
 #include "value.hpp"
 
 namespace QuickJS {
-    class ModuleDef {
+    class ModuleDef final {
     private:
         JSContext* ctx;
         JSModuleDef* moduleDef;

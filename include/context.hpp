@@ -7,9 +7,10 @@
 #include "pointer.hpp"
 #include "moduledef.hpp"
 #include "moduleloader.hpp"
+#include "promise.hpp"
 
 namespace QuickJS {
-    class Context {
+    class Context final {
     private:
         JSContext* ctx;
         void* ctxOpaque;
@@ -66,6 +67,7 @@ namespace QuickJS {
         Value createObject() const;
         Value createNull() const;
         Value createUndefined() const;
+        Promise createPromise() const;
         
         ModuleDef createModule(std::string name, JSModuleInitFunc moduleInit);
         ModuleLoader createModuleLoader();

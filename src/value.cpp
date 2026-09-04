@@ -38,6 +38,8 @@ Value::Value(Value&& other) noexcept {
 
     this->value = other.value;
 
+    this->copy = other.copy;
+
     other.ctx = NULL;
 
     other.value = JS_UNDEFINED;
@@ -54,6 +56,8 @@ Value& Value::operator=(Value&& other) noexcept {
         this->ctx = other.ctx;
 
         this->value = other.value;
+
+        this->copy = other.copy;
 
         other.ctx = NULL;
 
@@ -226,6 +230,8 @@ Exception Value::asException() const {
         Exception e = Exception(msg);
 
         JS_FreeCString(this->ctx, msg);
+
+        JS_FreeValue(this->ctx, message);
 
         return e;
     }
