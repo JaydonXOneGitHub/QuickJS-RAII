@@ -8,6 +8,7 @@
 #include "moduledef.hpp"
 #include "moduleloader.hpp"
 #include "promise.hpp"
+#include "wrappedcallback.hpp"
 
 namespace QuickJS {
     class Context final {
